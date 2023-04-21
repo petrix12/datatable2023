@@ -24,6 +24,33 @@
 9. Registrar el observer en **app\Providers\EventServiceProvider.php**.
 10. Ejecutar:
     + $ php artisan db:seed
-11. mmm
+
+## PARTE III
++ **Documentaciónn**: 
+    + https://rappasoft.com/docs/laravel-livewire-tables/v2/start/installation
+    + https://rappasoft.com/docs/laravel-livewire-tables/v2/start/configuration
+    + https://laravel.com/docs/10.x/localization
+    + https://laravel-lang.com/installation
+1. Instalar paquete laravel-livewire-tables:
+    + $ composer require rappasoft/laravel-livewire-tables
+2. Publicar Assets:
+    + $ php artisan vendor:publish --provider="Rappasoft\LaravelLivewireTables\LaravelLivewireTablesServiceProvider" --tag=livewire-tables-config
+    + $ php artisan vendor:publish --provider="Rappasoft\LaravelLivewireTables\LaravelLivewireTablesServiceProvider" --tag=livewire-tables-views
+    + $ php artisan vendor:publish --provider="Rappasoft\LaravelLivewireTables\LaravelLivewireTablesServiceProvider" --tag=livewire-tables-translations
+    + **Nota**: en el archivo de configuración **config\livewire-tables.php** se puede elegir trabajar con bootstrap en lugar de tailwindcss.
+3. Crear componente livewire datatable (de último se indica el modelo a víncular):
+    + $ php artisan make:datatable ArticleTable Article
+4. Modificar la vista **resources\views\dashboard.blade.php** para que muestre el datatable Article.
+5. Para poder cargar los estilos, ejecutar:
+    + $ npm run build
+6. Personalizar el controlador livewire **app\Http\Livewire\ArticleTable.php**.
+    + **Nota**: en el método **builder** se pueden indicar los campos y relaciones que se deseen mostrar en la tabla.
+7. Para cambiar la configirución del idioma ir a **config\app.php** y establecer **local** en **es**.
+8. Para traducir Laravel al español:
+    + $ php artisan lang:publish
+    + $ composer require laravel-lang/common --dev
+    + $ php artisan lang:add es
+
+## PARTE IV
 
 
