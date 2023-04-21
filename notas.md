@@ -17,6 +17,13 @@
     + $ php artisan make:factory ArticleFactory
 4. Definir datos de prueba en **database\factories\ArticleFactory.php**.
 5. Programar la creación de 150 registros indicados en el factory anterior en el seeder **database\seeders\DatabaseSeeder.php**.
-6. Ejecutar:
+6. Habilitar asignación másiva y establecer relaciones en los modelos **Article** y **User**.
+7. Crear observer:
+    + $ php artisan make:observer ArticleObserver
+8. Programar observer **app\Observers\ArticleObserver.php**.
+9. Registrar el observer en **app\Providers\EventServiceProvider.php**.
+10. Ejecutar:
     + $ php artisan db:seed
-7. mmm
+11. mmm
+
+

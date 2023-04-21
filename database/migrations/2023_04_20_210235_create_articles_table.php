@@ -19,6 +19,7 @@ return new class extends Migration
                 ->constrained()
                 ->onDelete('cascade');
             $table->boolean('is_published')->default(false);
+            $table->integer('sort');
             $table->timestamps();
         });
     }
