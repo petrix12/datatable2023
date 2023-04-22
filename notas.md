@@ -47,11 +47,17 @@
     + $ npm run build
 6. Para incluir nuestro estilos crear **resources\css\components.css**.
 7. Importar los estilos anteriores en **resources\css\app.css**.
-8. Dar nombre **welcome** a la ruta raíz en **routes\web.php**.
-9. Personalizar el controlador livewire **app\Http\Livewire\ArticleTable.php**.
+8. Crear y diseñar vistas:
+    + resources\views\articles\index.blade.php
+    + resources\views\articles\create.blade.php
+    + resources\views\articles\edit.blade.php
+    + resources\views\articles\show.blade.php
+    + resources\views\articles\tables\action.blade.php
+9.  Dar nombre **welcome** a la ruta raíz en **routes\web.php**.
+10. Personalizar el controlador livewire **app\Http\Livewire\ArticleTable.php**.
     + **Nota**: en el método **builder** se pueden indicar los campos y relaciones que se deseen mostrar en la tabla.
-10. Para cambiar la configirución del idioma ir a **config\app.php** y establecer **local** en **es**.
-11. Para traducir Laravel al español:
+11. Para cambiar la configirución del idioma ir a **config\app.php** y establecer **local** en **es**.
+12. Para traducir Laravel al español:
     + $ php artisan lang:publish
     + $ composer require laravel-lang/common --dev
     + $ php artisan lang:add es

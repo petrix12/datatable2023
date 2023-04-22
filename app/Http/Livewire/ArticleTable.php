@@ -19,6 +19,7 @@ class ArticleTable extends DataTableComponent
     {
         $this->setPrimaryKey('id');
         $this->setDefaultSort('id', 'desc');
+        $this->setSingleSortingDisabled();
     }
 
     public function columns(): array
@@ -26,20 +27,41 @@ class ArticleTable extends DataTableComponent
         return [
             //Column::make('Orden', 'sort'),
             Column::make('id')
-                ->sortable(fn($query, $direction) => $query->orderBy('id', $direction)),
+                ->sortable(fn($query, $direction) => $query->orderBy('id', $direction))
+                ->collapseOnTablet(),   /* Para colapsar desde un mobil en lugar desde una tablet, tenemos el método: ->collapseOnMobile() */
             Column::make('Autor', 'user.name')
-                ->sortable(),
+                ->sortable()
+                ->searchable(fn($query, $searchTerm) => $query->orWhere('title', 'like', '%' . $searchTerm . '%'))
+                ->collapseOnTablet(),
             Column::make('Título', 'title')
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
             BooleanColumn::make('Publicado', 'is_published')
                 /* ->setSuccessValue(false),
                 ->yesNo() */
-                ->sortable(),
+                ->sortable()
+                ->collapseOnTablet(),
             ImageColumn::make('Imagen')
-                ->location(fn() => 'https://cdn.pixabay.com/photo/2012/04/23/16/12/click-38743_1280.png'),
+                ->location(fn() => 'https://cdn.pixabay.com/photo/2012/04/23/16/12/click-38743_1280.png')
+                ->collapseOnTablet(),
             Column::make('Fecha creación', 'created_at')
-                ->sortable(),
-            ButtonGroupColumn::make('Action')
+                ->format(fn($value) => $value->format('d/m/Y'))
+                ->sortable()
+                ->searchable()
+                ->collapseOnTablet(),
+            Column::make('Acciones')
+                    ->label(fn($row) => view('articles.tables.action', [
+                        'id' => $row->id
+                    ]))
+                    ->collapseOnTablet(),
+            /* Column::make('Acciones', 'id')
+                ->format(fn($value) => view('articles.tables.action', [
+                    'id' => $value
+                ])), */
+            /* -Column::make('Acciones', 'id')
+                >format(fn($value) => "<a href='/dashboard?id={$value}' class='btn btn-green'>Ver</a>")
+                ->html() */
+            /* ButtonGroupColumn::make('Action')
                 ->buttons([
                     LinkColumn::make('Action')
                         ->title(fn() => 'Ver')
@@ -57,7 +79,7 @@ class ArticleTable extends DataTableComponent
                         ->attributes(fn() => [
                             'class' => 'btn btn-blue'
                         ])
-                ])
+                ]) */
             /* Column::make("Id", "id")
                 ->sortable(),
             Column::make("Title", "title")
