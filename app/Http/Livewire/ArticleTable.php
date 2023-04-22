@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\ArticlesExport;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Article;
@@ -10,10 +11,17 @@ use Rappasoft\LaravelLivewireTables\Views\Columns\BooleanColumn;
 use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 use Rappasoft\LaravelLivewireTables\Views\Columns\ImageColumn;
 use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ArticleTable extends DataTableComponent
 {
     // protected $model = Article::class;
+
+    // Para acciones en masa
+    /* public array $bulkActions = [
+        'deleteSelected' => 'Eliminar',
+    ]; */
 
     public function configure(): void
     {
@@ -50,7 +58,17 @@ class ArticleTable extends DataTableComponent
         //$this->setPaginationStatus(false);
 
         // Desabilitar la opción de seleccionar la cantidad de registros por página
-        $this->setPerPageVisibilityStatus(false);
+        //$this->setPerPageVisibilityStatus(false);
+
+        // Acciones masivas
+        $this->setBulkActions([
+            'deleteSelected' => 'Eliminar',
+            'exportSelected' => 'Exportar',
+        ]);
+
+        // Para el reordenamiento - Cuando se active este método, se debe deshabilitar todos los
+        // métodos relacionados con la paginación.
+        //$this->setReorderStatus(true);
     }
 
     public function columns(): array
@@ -134,5 +152,36 @@ class ArticleTable extends DataTableComponent
 
     public function builder(): Builder {
         return Article::query()->with('user');
+    }
+
+    public function deleteSelected() {
+        // dd($this->getSelected());
+        //$articles = Article::whereIn('id', $this->getSelected())->get();
+        //dd($articles);
+
+        if($this->getSelected()) {
+            Article::whereIn('id', $this->getSelected())->delete();
+            $this->clearSelected();
+            $this->emit('succes', 'Registros seleccionados eleminados exitosamente');
+        } else {
+            $this->emit('error', 'No hay registros seleccionados');
+        }
+    }
+
+    public function exportSelected() {
+        if($this->getSelected()) {
+            $this->clearSelected();
+            $articles = Article::whereIn('id', $this->getSelected())->get();
+            return Excel::download(new ArticlesExport($articles), 'articles.xlsx');
+        } else {
+            return Excel::download(new ArticlesExport($this->getRows()), 'articles.xlsx');
+        }
+        $this->emit('succes', 'Los registros se exportaron exitosamente');
+    }
+
+    public function reorder($items) {
+        foreach ($items as $item) {
+            Article::find((int)$item['value'])->update(['sort' => (int)$item['order']]);
+        }
     }
 }

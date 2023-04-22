@@ -41,5 +41,30 @@
         @stack('modals')
 
         @livewireScripts
+
+        {{-- https://sweetalert2.github.io/#examples --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.x.x/dist/livewire-sortable.js"></script>
+        <script>
+            /* Evento para pedir que se escuche un evento livewire desde javascript */
+            Livewire.on('error', function(message) {
+                /* alert(message); */
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: message,
+                    /* footer: '<a href="">Why do I have this issue?</a>' */
+                })
+            });
+
+            Livewire.on('succes', function(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            });
+        </script>
     </body>
 </html>
