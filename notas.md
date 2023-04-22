@@ -7,6 +7,8 @@
 2. Crear base datos **datatable**.
 3. Ejecutar migraciones:
     + $ php artisan migrate
+4. Ejecutar el compilador de VITE:
+    + $ npm run dev
 
 ## PARTE II
 1. Ejecutar:
@@ -43,10 +45,13 @@
 4. Modificar la vista **resources\views\dashboard.blade.php** para que muestre el datatable Article.
 5. Para poder cargar los estilos, ejecutar:
     + $ npm run build
-6. Personalizar el controlador livewire **app\Http\Livewire\ArticleTable.php**.
+6. Para incluir nuestro estilos crear **resources\css\components.css**.
+7. Importar los estilos anteriores en **resources\css\app.css**.
+8. Dar nombre **welcome** a la ruta raíz en **routes\web.php**.
+9. Personalizar el controlador livewire **app\Http\Livewire\ArticleTable.php**.
     + **Nota**: en el método **builder** se pueden indicar los campos y relaciones que se deseen mostrar en la tabla.
-7. Para cambiar la configirución del idioma ir a **config\app.php** y establecer **local** en **es**.
-8. Para traducir Laravel al español:
+10. Para cambiar la configirución del idioma ir a **config\app.php** y establecer **local** en **es**.
+11. Para traducir Laravel al español:
     + $ php artisan lang:publish
     + $ composer require laravel-lang/common --dev
     + $ php artisan lang:add es
