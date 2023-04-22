@@ -29,6 +29,28 @@ class ArticleTable extends DataTableComponent
             });
         $this->setDefaultSort('id', 'desc');
         $this->setSingleSortingDisabled();
+
+        // Para personalizar la paginación
+        $this->setPageName('pagina');
+
+        // Valor por defecto de registros por página
+        $this->setPerPage(25);  // Revisar este método
+
+        // Para personalizar la cantidad de páginas por página
+        $this->setPerPageAccepted([
+            5,
+            10,
+            25,
+            50,
+            100,
+            -1
+        ]);
+
+        // Desabilitar la paginación
+        //$this->setPaginationStatus(false);
+
+        // Desabilitar la opción de seleccionar la cantidad de registros por página
+        $this->setPerPageVisibilityStatus(false);
     }
 
     public function columns(): array
