@@ -17,7 +17,16 @@ class ArticleTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+            ->setTableRowUrl(function($row) {
+                return route('welcome');
+                /* return route('dashboard', [
+                    'id' => $row->id
+                ]); */
+            })
+            ->setTableRowUrlTarget(function($row) {
+                return '_blank';
+            });
         $this->setDefaultSort('id', 'desc');
         $this->setSingleSortingDisabled();
     }
@@ -31,11 +40,12 @@ class ArticleTable extends DataTableComponent
                 ->collapseOnTablet(),   /* Para colapsar desde un mobil en lugar desde una tablet, tenemos el método: ->collapseOnMobile() */
             Column::make('Autor', 'user.name')
                 ->sortable()
-                ->searchable(fn($query, $searchTerm) => $query->orWhere('title', 'like', '%' . $searchTerm . '%'))
+                ->searchable()
                 ->collapseOnTablet(),
             Column::make('Título', 'title')
                 ->sortable()
-                ->searchable(),
+                ->searchable(fn($query, $searchTerm) => $query->orWhere('title', 'like', '%' . $searchTerm . '%'))
+                ->unclickable(),
             BooleanColumn::make('Publicado', 'is_published')
                 /* ->setSuccessValue(false),
                 ->yesNo() */
@@ -53,7 +63,8 @@ class ArticleTable extends DataTableComponent
                     ->label(fn($row) => view('articles.tables.action', [
                         'id' => $row->id
                     ]))
-                    ->collapseOnTablet(),
+                    ->collapseOnTablet()
+                    ->unclickable(),
             /* Column::make('Acciones', 'id')
                 ->format(fn($value) => view('articles.tables.action', [
                     'id' => $value
