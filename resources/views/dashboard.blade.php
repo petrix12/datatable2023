@@ -10,6 +10,7 @@
             {{-- <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <x-welcome />
             </div> --}}
+            <p>Aquí puede ir algo</p>
             @livewire('article-table')
         </div>
     </div>

@@ -13,6 +13,10 @@ use Rappasoft\LaravelLivewireTables\Views\Columns\ImageColumn;
 use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Facades\Excel;
+use Rappasoft\LaravelLivewireTables\Views\Filters\DateFilter;
+use Rappasoft\LaravelLivewireTables\Views\Filters\NumberFilter;
+use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
+use Rappasoft\LaravelLivewireTables\Views\Filters\TextFilter;
 
 class ArticleTable extends DataTableComponent
 {
@@ -179,9 +183,54 @@ class ArticleTable extends DataTableComponent
         $this->emit('succes', 'Los registros se exportaron exitosamente');
     }
 
+    // Reordenar registros con arrastrar y soltar
     public function reorder($items) {
         foreach ($items as $item) {
             Article::find((int)$item['value'])->update(['sort' => (int)$item['order']]);
         }
+    }
+
+    // Filtros personalizados
+    public function filters(): array {
+        return [
+            // Filtrar por selección
+            SelectFilter::make('Publicado')
+                ->options([
+                    '' => 'Todos',
+                    '1' => 'Si',
+                    '2' => 'No'
+                ])
+                ->filter(function($query, $value) {
+                    if($value != '') {
+                        $query->where('is_published', $value);
+                    }
+                }),
+            // Filtrar por fecha
+            DateFilter::make('Desde')
+                ->config([
+                    'min' => '2023-04-20',
+                    'max' => '2023-04-29'
+                ])
+                ->filter(function($query, $value) {
+                    $query->whereDate('articles.created_at', '>=', $value);
+                }),
+            DateFilter::make('Hasta')
+                ->filter(function($query, $value) {
+                    $query->whereDate('articles.created_at', '<=', $value);
+                }),
+            // Filtrar por número
+            NumberFilter::make('ID mayor que')
+                /* ->config([
+                    'placeholder' => 'Ingrese un número'
+                ]) */
+                ->filter(function($query, $value) {
+                    $query->where('articles.id', '>=', $value);
+                }),
+            // Filtro personalizado por texto
+            TextFilter::make('Título')
+                ->filter(function($query, $value) {
+                    $query->where('title', 'like', '%' . $value . '%');
+                })
+        ];
     }
 }

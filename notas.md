@@ -81,10 +81,45 @@
 
 ## Herramienta para la generación de CRUD
 + https://github.com/flightsadmin/livewire-crud
++ https://www.youtube.com/watch?v=4YJStyb9kJA
++ https://www.youtube.com/watch?v=dolYESZlh-s
 1. Instalar dependencia **Livewire Crud Generator**:
     + $ composer require flightsadmin/livewire-crud
     + $ php artisan crud:install
 2. Generar CRUD del modelo User:
     + $ php artisan crud:generate users
     + **Nota**: dar el nombre de la tabla tal cual está en la base de datos.
+
+
+## Cambiar de phpoffice/phpexcel a phpoffice/phpspreadsheet
+1. Ejecutar:
+    + $ composer remove phpoffice/phpexcel
+    + $ composer require phpoffice/phpspreadsheet
+2. Abrir el archivo donde se estaba usando PHPExcel y reemplazar todas las referencias a PHPExcel por PhpOffice\PhpSpreadsheet.
+3. Si estás utilizando una versión anterior de PHP, debes actualizar a una versión compatible con PhpSpreadsheet. PhpSpreadsheet requiere PHP 7.2 o posterior.
+4. Ahora, en tu aplicación Laravel, debes actualizar las referencias al paquete PhpExcel por PhpSpreadsheet. Por ejemplo, si estás utilizando Laravel Excel, debes actualizar la configuración en el archivo config/excel.php:
+    ```php
+    // Reemplazar
+    'excel' => [
+        'class' => 'Maatwebsite\Excel\ExcelServiceProvider',
+    ],
+
+    // Por
+    'excel' => [
+        'class' => 'Maatwebsite\Excel\ExcelServiceProvider',
+        'aliases' => [
+            'Excel' => 'Maatwebsite\Excel\Facades\Excel',
+        ],
+    ],    
+    ```
+5. Por último, deberás actualizar cualquier código que haga uso de PhpExcel en tu aplicación Laravel, para que haga uso de las clases y métodos de PhpSpreadsheet.
+
+## Generación de un CRUD con los comanandos nativos de Laravel
+1. Ejecutar:
+    + $ php artisan make:crud Category --migration
+    + **Nota**: Esto creará automáticamente el controlador, modelo, migración y vistas necesarios para la gestión básica de los datos del modelo.
+
+
+
+
 
